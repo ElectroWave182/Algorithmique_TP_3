@@ -1,0 +1,96 @@
+Exercice 1 :
+____________
+
+
+def part(verbe):
+	assert verbe == "aller" or verbe[-2:] != "er", "Erreur, le verbe n'est pas du 1er groupe"
+	return verbe[:-2] + "ant"
+
+assert part("pencher") == "penchant", "le 1er groupe ne fonctionne pas"
+assert part("aller") == "Erreur", "les autres groupes ne retournent pas d'erreur"
+
+
+Exercice 2 :
+____________
+
+
+def lmlm(L, L_sol):
+	for ele in L:
+		assert ele > "", "Erreur : la liste ne contient pas que des str"
+		
+		taille = len(ele)
+		if L_sol[:] == []:
+			tailleMax = 0
+		else:
+			tailleMax = len(L_sol[0])
+						
+		if taille > tailleMax:
+			del L_sol[:]
+			
+		if taille >= tailleMax:
+			L_sol.append(ele)
+
+
+L_sol = []
+lmlm(["et", "ou", "a"], [])
+assert L_sol == ["et", "ou"], "Erreur 1"
+
+lmlm(["or", "ni", "car"], ["et", "ou"])
+assert L_sol == ["car"], "Erreur 2"
+
+lmlm(["par", "ni", "car"], ["car"])
+assert L_sol == ["car", "par"], "Erreur 3"
+
+lmlm(["mais", "ou", "donc", "puisque", "lorsque"], ["car", "par"])
+assert L_sol == ["puisque", "lorsque"], "Erreur 4"
+
+lmlm(["pain", "vins", "eau"], ["puisque", "lorsque"])
+assert L_sol == ["puisque", "lorsque"], "Erreur 5"
+
+
+Exercice 3 :
+____________
+
+
+1)
+test 1 : mot1 = "goret", mot2 = "toucan" --> pas hybride
+test 2 : mot1 = "canard", mot2 = "toucan" --> hybride
+test 3 : mot1 = "toucan", mot2 = "canard" --> hybride
+test 4 : mot1 = "souris", mot2 = "chauve-souris" --> pas hybride
+test 5 : mot1 = "chien", mot2 = "cheval" --> pas hybride
+
+2)
+def hybride(mot1, mot2):
+	taille1, taille2 = len(mot1), len(mot2)
+	limite = min(taille1, taille2)
+	cote1, cote2 = True, True
+
+	for i in range(limite):
+		
+		cote1 = cote1 and mot1[i] == mot2[-i - 1]
+		cote2 = cote2 and mot2[i] == mot1[-i - 1]
+
+		if not(cote1 or cote2):
+			if i != 1:
+				return ""
+				
+			if mot1[i - 1] == mot2[-i]:
+				return mot1[:i - 1] + mot2
+			else:
+				return mot2[:i - 1] + mot1
+	return ""
+
+3)
+animaux1 = ["aribou", "tigre", "lapin", "pecari", "zebu", "pintade", "cheval", "alligator", "tortue", "souris", "chauve-souris", "calao", "dodo", "dorade", "canard", "toucan", "buffle", "pelican", "chien", "loup", "chien-loup", "patou", "caniche", "pingouin", "caracal", "wapiti"]
+animaux2 = animaux1[:]
+
+hybrides = []
+for animal1 in animaux1:
+	for animal2 in animaux2:
+		
+		h = hybride(animal1, animal2)
+		if animal1 != animal2 and h != "" and not(h in hybrides):
+			hybrides.append(h)
+
+assert hybrides == ["alligatortue", "canicheval", "caraca-lao", "caracalligator", "chevalligator", "dodorade", "lapingouin", "lapintade", "patoucan", "pecaribou", "pelicanard", "pelicaniche", "toucanard", "toucaniche", "wapitigre", "zebuffle"], "Marche pas"
+			
